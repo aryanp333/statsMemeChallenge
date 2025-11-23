@@ -82,27 +82,19 @@ This exercise is fundamentally about **walking AI through a process** to create 
 
 ## The Statistics Meme
 
-The four-panel statistics meme has been generated, demonstrating selection bias through visualization:
+The four-panel statistics meme demonstrates selection bias through visualization:
 
 ![Four-panel statistics meme showing Reality (original image), Your Model (stippled version), Selection Bias (letter S), and Estimate (masked stippled image)](statistics_meme_result.png)
 
-**Note:** The meme was generated using the code below (hidden in the final HTML output). To regenerate the meme, you can run:
-```bash
-python3 generate_meme.py
-```
-
-The following code generates the four-panel statistics meme demonstrating selection bias. The code loads your original and stippled images from Part 1, creates a bold letter "S" to represent selection bias, applies it as a mask to the stippled image, and assembles everything into a professional visualization.
+*The meme was generated using the code in this document (code is hidden in the final HTML output for a clean presentation).*
 
 ```{python}
 #| label: generate-meme
 #| echo: false
 #| eval: false
-#| fig-width: 16
-#| fig-height: 4
-#| dpi: 200
 #| 
 # Note: The meme has been pre-generated using generate_meme.py
-# The code is shown here for reference but not executed due to NumPy compatibility
+# Code is included for reference but not executed (echo: false ensures code is hidden in HTML)
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont

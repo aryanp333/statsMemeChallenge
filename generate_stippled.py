@@ -1,18 +1,25 @@
 """
 Generate a stippled image from the original image using blue noise stippling.
-This creates the stippled image needed for Part 2 of the challenge.
+This uses the exact algorithm from Part 1 with toroidal Gaussian kernel.
 """
 
 import numpy as np
 from PIL import Image
+from typing import Optional
 import os
 
-def compute_importance(gray_img, extreme_downweight=0.5, extreme_threshold_low=0.4, 
-                       extreme_threshold_high=0.8, extreme_sigma=0.1, 
-                       mid_tone_boost=0.4, mid_tone_sigma=0.2):
+def compute_importance(
+    gray_img: np.ndarray,
+    extreme_downweight: float = 0.5,
+    extreme_threshold_low: float = 0.4,
+    extreme_threshold_high: float = 0.8,
+    extreme_sigma: float = 0.1,
+    mid_tone_boost: float = 0.4,
+    mid_tone_sigma: float = 0.2,
+):
     """
-    Compute importance map for stippling.
-    Higher importance = more dots should be placed there.
+    Importance map computation that downweights extreme tones (very dark and very light)
+    using smooth functions, while boosting mid-tones.
     """
     I = np.clip(gray_img, 0.0, 1.0)
     
@@ -33,111 +40,115 @@ def compute_importance(gray_img, extreme_downweight=0.5, extreme_threshold_low=0
     extreme_mask = np.maximum(dark_mask, light_mask)
     importance = I_inverted * (1.0 - extreme_downweight * extreme_mask)
     
-    # Add smooth gradual mid-tone boost
+    # Add smooth gradual mid-tone boost (Gaussian centered on 0.65)
     mid_tone_center = 0.65
     mid_tone_gaussian = np.exp(-((I - mid_tone_center) ** 2) / (2.0 * (mid_tone_sigma ** 2)))
     if mid_tone_gaussian.max() > 0:
         mid_tone_gaussian = mid_tone_gaussian / mid_tone_gaussian.max()
     
-    importance = importance + mid_tone_boost * mid_tone_gaussian
-    importance = np.clip(importance, 0.0, 1.0)
+    importance = importance * (1.0 + mid_tone_boost * mid_tone_gaussian)
     
+    # Normalize to [0,1]
+    m, M = importance.min(), importance.max()
+    if M > m: 
+        importance = (importance - m) / (M - m)
     return importance
 
-def gaussian_kernel(size, sigma):
-    """Create a 2D Gaussian kernel."""
-    kernel = np.zeros((size, size))
-    center = size // 2
-    for i in range(size):
-        for j in range(size):
-            x, y = i - center, j - center
-            kernel[i, j] = np.exp(-(x**2 + y**2) / (2 * sigma**2))
-    return kernel / kernel.sum()
+def toroidal_gaussian_kernel(h: int, w: int, sigma: float):
+    """
+    Create a periodic (toroidal) 2D Gaussian kernel centered at (0,0).
+    The toroidal property means the kernel wraps around at the edges,
+    ensuring consistent repulsion behavior regardless of point location.
+    """
+    y = np.arange(h)
+    x = np.arange(w)
+    # Compute toroidal distances (minimum distance considering wrapping)
+    dy = np.minimum(y, h - y)[:, None]
+    dx = np.minimum(x, w - x)[None, :]
+    # Compute Gaussian
+    kern = np.exp(-(dx**2 + dy**2) / (2.0 * sigma**2))
+    s = kern.sum()
+    if s > 0:
+        kern /= s  # Normalize
+    return kern
 
-def blue_noise_stippling(importance_map, dot_percentage=0.12, kernel_size=12, sigma=2.5):
+def void_and_cluster(
+    input_img: np.ndarray,
+    percentage: float = 0.08,
+    sigma: float = 0.9,
+    content_bias: float = 0.9,
+    importance_img: Optional[np.ndarray] = None,
+    noise_scale_factor: float = 0.1,
+):
     """
-    Create blue noise stippling using importance sampling and repulsion.
-    Improved to match exemplar style: small dots with varying densities.
+    Generate blue noise stippling pattern from input image using a modified
+    void-and-cluster algorithm with content-weighted importance.
+    This is the exact algorithm from Part 1.
     """
-    height, width = importance_map.shape
-    
-    # Use adaptive dot percentage based on importance
-    # Higher importance areas get more dots
-    base_dots = int(height * width * dot_percentage)
-    
-    # Scale number of dots by average importance to get better coverage
-    avg_importance = np.mean(importance_map)
-    num_dots = int(base_dots * (1.0 + avg_importance))
-    
-    # Initialize with white background (1.0 = white, 0.0 = black dot)
-    stipple = np.ones((height, width), dtype=np.float32)
-    
-    # Create repulsion kernel (Gaussian) - smaller for tighter spacing
-    kernel = gaussian_kernel(kernel_size, sigma)
-    kernel_center = kernel_size // 2
-    
-    # Energy map: higher energy = less desirable to place a dot
-    energy = np.ones((height, width), dtype=np.float32) * 1e6
-    
-    # Sample points based on importance and energy
+    I = np.clip(input_img, 0.0, 1.0)
+    h, w = I.shape
+
+    # Compute or use provided importance map
+    if importance_img is None:
+        importance = compute_importance(I)
+    else:
+        importance = np.clip(importance_img, 0.0, 1.0)
+
+    # Create toroidal Gaussian kernel for repulsion
+    kernel = toroidal_gaussian_kernel(h, w, sigma)
+
+    # Initialize energy field: lower energy → more likely to be picked
+    energy_current = -importance * content_bias
+
+    # Stipple buffer: start with white background; selected points become black dots
+    final_stipple = np.ones_like(I)
     samples = []
-    
-    for i in range(num_dots):
-        # Combine importance (want dots in important areas) and energy (avoid existing dots)
-        # Lower energy = better place for new dot
-        # Higher importance = better place for new dot
-        score = importance_map / (energy + 1e-6)
-        
-        # Add controlled randomness - less random for better distribution
-        randomness = 0.85 + 0.3 * np.random.random(score.shape)
-        score = score * randomness
-        
-        # Find best location
-        flat_idx = np.argmax(score.flatten())
-        y, x = np.unravel_index(flat_idx, (height, width))
-        
-        # Place dot (single pixel for small dots)
-        stipple[y, x] = 0.0
-        
-        # Update energy map (add repulsion around this dot)
-        # Use stronger repulsion to ensure even spacing
-        y_min = max(0, y - kernel_center)
-        y_max = min(height, y + kernel_center + 1)
-        x_min = max(0, x - kernel_center)
-        x_max = min(width, x + kernel_center + 1)
-        
-        # Calculate kernel slice to match energy slice exactly
-        k_y_min = kernel_center - (y - y_min)
-        k_x_min = kernel_center - (x - x_min)
-        
-        # Get the actual sizes
-        energy_h = y_max - y_min
-        energy_w = x_max - x_min
-        
-        # Extract matching kernel slice - ensure it matches energy slice size
-        k_y_max = min(k_y_min + energy_h, kernel_size)
-        k_x_max = min(k_x_min + energy_w, kernel_size)
-        k_y_min = max(0, k_y_min)
-        k_x_min = max(0, k_x_min)
-        
-        # Adjust energy slice if kernel was clipped
-        actual_k_h = k_y_max - k_y_min
-        actual_k_w = k_x_max - k_x_min
-        
-        if actual_k_h < energy_h or actual_k_w < energy_w:
-            # Adjust energy slice to match kernel
-            y_max = y_min + actual_k_h
-            x_max = x_min + actual_k_w
-        
-        # Extract the matching kernel portion
-        kernel_slice = kernel[k_y_min:k_y_max, k_x_min:k_x_max]
-        
-        # Stronger repulsion for better blue noise properties
-        energy[y_min:y_max, x_min:x_max] += kernel_slice * 1.5
-        
-        samples.append((y, x))
-    
-    return stipple, samples
+
+    # Helper function to roll kernel to an arbitrary position
+    def energy_splat(y, x):
+        """Get energy contribution by rolling the kernel to position (y, x)."""
+        return np.roll(np.roll(kernel, shift=y, axis=0), shift=x, axis=1)
+
+    # Number of points to select
+    num_points = int(I.size * percentage)
+
+    # Choose first point near center with minimal energy
+    cy, cx = h // 2, w // 2
+    r = min(20, h // 10, w // 10)
+    ys = slice(max(0, cy - r), min(h, cy + r))
+    xs = slice(max(0, cx - r), min(w, cx + r))
+    region = energy_current[ys, xs]
+    flat = np.argmin(region)
+    y0 = flat // region.shape[1] + (cy - r) if region.shape[1] > 0 else cy - r
+    x0 = flat % region.shape[1] + (cx - r) if region.shape[1] > 0 else cx - r
+
+    # Place first point
+    energy_current = energy_current + energy_splat(y0, x0)
+    energy_current[y0, x0] = np.inf  # Prevent reselection
+    samples.append((y0, x0, I[y0, x0]))
+    final_stipple[y0, x0] = 0.0  # Black dot
+
+    # Iteratively place remaining points
+    for i in range(1, num_points):
+        # Add exploration noise that decreases over time
+        exploration = 1.0 - (i / num_points) * 0.5  # Decrease from 1.0 to 0.5
+        noise = np.random.normal(0.0, noise_scale_factor * content_bias * exploration, size=energy_current.shape)
+        energy_with_noise = energy_current + noise
+
+        # Find position with minimum energy (with noise for exploration)
+        pos_flat = np.argmin(energy_with_noise)
+        y = pos_flat // w
+        x = pos_flat % w
+
+        # Add Gaussian splat to prevent nearby points from being selected
+        energy_current = energy_current + energy_splat(y, x)
+        energy_current[y, x] = np.inf  # Prevent reselection
+
+        # Record the sample
+        samples.append((y, x, I[y, x]))
+        final_stipple[y, x] = 0.0  # Black dot
+
+    return final_stipple, np.array(samples)
 
 def main():
     # Load original image
@@ -155,40 +166,62 @@ def main():
         original_img = original_img.convert('L')
     
     # Convert to numpy array and normalize
-    original_array = np.array(original_img, dtype=np.float32) / 255.0
-    print(f"Image shape: {original_array.shape}")
+    img_array = np.array(original_img, dtype=np.float32) / 255.0
+    print(f"Image shape: {img_array.shape}")
     
-    # Resize if too large (for faster processing)
-    max_dimension = 800
-    if max(original_array.shape) > max_dimension:
-        scale = max_dimension / max(original_array.shape)
-        new_height = int(original_array.shape[0] * scale)
-        new_width = int(original_array.shape[1] * scale)
-        original_img_resized = original_img.resize((new_width, new_height), Image.LANCZOS)
-        original_array = np.array(original_img_resized, dtype=np.float32) / 255.0
-        print(f"Resized to: {original_array.shape}")
+    # Resize if too large (for faster processing) - matching Part 1
+    max_size = 512
+    if img_array.shape[0] > max_size or img_array.shape[1] > max_size:
+        scale = max_size / max(img_array.shape[0], img_array.shape[1])
+        new_size = (int(img_array.shape[1] * scale), int(img_array.shape[0] * scale))
+        img_resized_pil = original_img.resize(new_size, Image.Resampling.LANCZOS)
+        if img_resized_pil.mode != 'L':
+            img_resized_pil = img_resized_pil.convert('L')
+        img_resized = np.array(img_resized_pil, dtype=np.float32) / 255.0
+        print(f"Resized image from {img_array.shape} to {img_resized.shape} for processing")
+    else:
+        img_resized = img_array.copy()
     
-    # Compute importance map
-    print("Computing importance map...")
-    importance_map = compute_importance(original_array)
+    # Ensure img_resized is 2D grayscale
+    if len(img_resized.shape) > 2:
+        img_resized = img_resized[:, :, 0]
+    elif len(img_resized.shape) == 2:
+        pass
+    else:
+        raise ValueError(f"Unexpected image shape: {img_resized.shape}")
     
-    # Generate stippled image
-    print("Generating blue noise stippling...")
-    # Increased dot percentage for better density variation matching exemplar
-    dot_percentage = 0.12  # 12% dot coverage for denser, more detailed stippling
-    stipple_array, samples = blue_noise_stippling(importance_map, dot_percentage=dot_percentage, 
-                                                   kernel_size=12, sigma=2.5)
+    print(f"Final image shape: {img_resized.shape} (should be 2D for grayscale)")
     
-    print(f"Generated {len(samples)} stipple points ({dot_percentage*100:.1f}% coverage)")
+    # Compute importance map using Part 1 parameters
+    importance_map = compute_importance(
+        img_resized,
+        extreme_downweight=0.5,
+        extreme_threshold_low=0.2,
+        extreme_threshold_high=0.8,
+        extreme_sigma=0.1
+    )
+    print("Importance map computed")
+    
+    # Generate stippled image using Part 1 algorithm
+    print("Generating blue noise stippling pattern...")
+    stipple_pattern, samples = void_and_cluster(
+        img_resized,
+        percentage=0.08,  # 8% dot coverage as in Part 1
+        sigma=0.9,  # Part 1 parameter
+        content_bias=0.9,  # Part 1 parameter
+        importance_img=importance_map,
+        noise_scale_factor=0.1  # Part 1 parameter
+    )
+    
+    print(f"Generated {len(samples)} stipple points ({0.08*100:.1f}% coverage)")
     
     # Save as .npy file
     output_file = 'stippleImage.npy'
-    np.save(output_file, stipple_array)
+    np.save(output_file, stipple_pattern)
     print(f"✅ Saved stippled image to: {output_file}")
-    print(f"   Shape: {stipple_array.shape}")
-    print(f"   Value range: [{stipple_array.min():.2f}, {stipple_array.max():.2f}]")
+    print(f"   Shape: {stipple_pattern.shape}")
+    print(f"   Value range: [{stipple_pattern.min():.2f}, {stipple_pattern.max():.2f}]")
     print(f"   (0.0 = black dot, 1.0 = white background)")
 
 if __name__ == '__main__':
     main()
-
