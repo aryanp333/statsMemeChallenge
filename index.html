@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.8.23">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -61,14 +61,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="index_files/libs/clipboard/clipboard.min.js"></script>
 <script src="index_files/libs/quarto-html/quarto.js" type="module"></script>
 <script src="index_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="index_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="index_files/libs/quarto-html/popper.min.js"></script>
 <script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="index_files/libs/quarto-html/anchor.min.js"></script>
 <link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="index_files/libs/quarto-html/quarto-syntax-highlighting-ea385d0e468b0dd5ea5bf0780b1290d9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting-1fe81d0376b2c50856e68e651e390326.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="index_files/libs/bootstrap/bootstrap-bb462d781dde1847d9e3ccf7736099dd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="index_files/libs/bootstrap/bootstrap-d6a003b94517c951b2d65075d42fb01b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -107,7 +108,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-📊 Challenge Requirements
+<span class="screen-reader-only">Important</span>📊 Challenge Requirements
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -165,7 +166,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-📁 Repository Setup Instructions
+<span class="screen-reader-only">Important</span>📁 Repository Setup Instructions
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -189,106 +190,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="implementation-guide" class="level2">
-<h2 class="anchored" data-anchor-id="implementation-guide">Implementation Guide</h2>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<section id="the-statistics-meme" class="level2">
+<h2 class="anchored" data-anchor-id="the-statistics-meme">The Statistics Meme</h2>
+<p>The four-panel statistics meme has been generated, demonstrating selection bias through visualization:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="statistics_meme_result.png" class="img-fluid figure-img"></p>
+<figcaption>Four-panel statistics meme showing Reality (original image), Your Model (stippled version), Selection Bias (letter S), and Estimate (masked stippled image)</figcaption>
+</figure>
 </div>
-<div class="callout-title-container flex-fill">
-📝 Code Visibility in Final HTML
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><strong>Important:</strong> When you create your final <code>index.qmd</code> file, use <code>echo: false</code> for all code chunks that generate the meme. The rendered HTML should show only the meme image and your explanation, not the code. The code should still be in the <code>.qmd</code> file (so it can be rendered), but it won’t be displayed in the HTML output.</p>
-</div>
-</div>
-<section id="step-1-load-your-images" class="level3">
-<h3 class="anchored" data-anchor-id="step-1-load-your-images">Step 1: Load Your Images</h3>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">R</a></li></ul>
-<div class="tab-content">
-<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Load original image</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>original_img <span class="op">=</span> Image.<span class="bu">open</span>(<span class="st">'your_image.jpg'</span>)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> original_img.mode <span class="op">!=</span> <span class="st">'L'</span>:</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    original_img <span class="op">=</span> original_img.convert(<span class="st">'L'</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>original_array <span class="op">=</span> np.array(original_img, dtype<span class="op">=</span>np.float32) <span class="op">/</span> <span class="fl">255.0</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Load stippled image (from Part 1 - see https://flyaflya.github.io/stippleChallenge/)</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>stipple_array <span class="op">=</span> np.load(<span class="st">'stippleImage.npy'</span>)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Original: </span><span class="sc">{</span>original_array<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">, Stipple: </span><span class="sc">{</span>stipple_array<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(imager)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load original image</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>original_img <span class="ot">&lt;-</span> <span class="fu">load.image</span>(<span class="st">'your_image.jpg'</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">dim</span>(original_img)[<span class="dv">3</span>] <span class="sc">==</span> <span class="dv">3</span>) {</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  original_img <span class="ot">&lt;-</span> <span class="fu">grayscale</span>(original_img)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to matrix [h, w] and normalize</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>arr <span class="ot">&lt;-</span> <span class="fu">as.array</span>(original_img)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>original_array <span class="ot">&lt;-</span> <span class="fu">t</span>(arr[,,<span class="dv">1</span>,<span class="dv">1</span>]) <span class="sc">/</span> <span class="fu">max</span>(arr)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Load stippled image (from Part 1 - see https://flyaflya.github.io/stippleChallenge/)</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Adjust based on how you saved it - could be .RData, .rds, or regenerate</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># stipple_array &lt;- readRDS('stippleImage.rds')</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Original dimensions:"</span>, <span class="fu">dim</span>(original_array), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-</div>
+<p><strong>Note:</strong> The meme was generated using the code below (hidden in the final HTML output). To regenerate the meme, you can run:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> generate_meme.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The following code generates the four-panel statistics meme demonstrating selection bias. The code loads your original and stippled images from Part 1, creates a bold letter “S” to represent selection bias, applies it as a mask to the stippled image, and assembles everything into a professional visualization.</p>
 </section>
-<section id="step-2-create-the-block-letter-s" class="level3">
-<h3 class="anchored" data-anchor-id="step-2-create-the-block-letter-s">Step 2: Create the Block Letter “S”</h3>
-<p>Create a matrix matching your image dimensions with a bold letter “S” rendered as black pixels on a white background.</p>
-<p><strong>Hints:</strong></p>
-<ul>
-<li>Use image drawing libraries to render text (PIL/Pillow in Python, <code>magick</code> in R)</li>
-<li>Create a white background matrix matching your image dimensions (height × width)</li>
-<li>Render a bold letter “S” centered in the image (try 80-90% of image height for font size)</li>
-<li>Convert the result to a matrix with values in [0, 1] range (0.0 = black, 1.0 = white)</li>
-<li>The “S” should be clearly visible and fill most of the image space</li>
-</ul>
-</section>
-<section id="step-3-create-the-masked-estimate" class="level3">
-<h3 class="anchored" data-anchor-id="step-3-create-the-masked-estimate">Step 3: Create the Masked Estimate</h3>
-<p>Your stippled image is a matrix where black dots (0.0) represent data points and white (1.0) is background. The “S” matrix shows where selection bias occurs (black “S” = missing data). To create the masked estimate, remove stipple points (set to white) wherever the “S” is black.</p>
-<p><strong>Hints:</strong></p>
-<ul>
-<li>Create a binary mask by thresholding the “S” image (e.g., pixels &lt; 0.5 are part of the “S”)</li>
-<li>Apply the mask to your stippled image: where the “S” is black, set those pixels to white (1.0)</li>
-<li>Where the “S” is white, keep the original stipple values</li>
-<li>This creates the visual effect of “missing data” in the shape of the “S”</li>
-<li>Use conditional assignment or boolean masking (e.g., <code>np.where()</code> in Python, <code>ifelse()</code> in R)</li>
-</ul>
-</section>
-<section id="step-4-assemble-the-four-panel-meme" class="level3">
-<h3 class="anchored" data-anchor-id="step-4-assemble-the-four-panel-meme">Step 4: Assemble the Four-Panel Meme</h3>
-<p>Use the image composition capabilities of matplotlib (Python) or imager (R) to arrange your four matrices as panels in a single figure.</p>
-<p><strong>Hints:</strong></p>
-<ul>
-<li>Create a multi-panel layout (1×4 for horizontal, 2×2 for grid)</li>
-<li>Display each matrix as a grayscale image: original, stippled, “S”, and masked stippled</li>
-<li>Add clear labels: “Reality”, “Your Model”, “Selection Bias”, “Estimate”</li>
-<li>Use minimal spacing between panels for a clean, professional look</li>
-<li>Consider a light background color (like pink) to make panels stand out</li>
-<li>Save with high DPI (150-300) for quality output</li>
-<li>In Python: use <code>plt.subplots()</code> and <code>imshow()</code> for each panel</li>
-<li>In R: use <code>par(mfrow = ...)</code> and <code>plot()</code> with imager’s <code>as.cimg()</code> to convert matrices</li>
-</ul>
-</section>
+<section id="understanding-selection-bias-through-visualization" class="level2">
+<h2 class="anchored" data-anchor-id="understanding-selection-bias-through-visualization">Understanding Selection Bias Through Visualization</h2>
+<p>This four-panel meme demonstrates the concept of <strong>selection bias</strong> in statistics:</p>
+<ol type="1">
+<li><p><strong>Reality</strong> (Panel 1): This represents the true population—your original image. This is the complete, unbiased truth we’re trying to understand.</p></li>
+<li><p><strong>Your Model</strong> (Panel 2): This is your stippled representation—a model of reality created through systematic sampling (blue noise stippling). The black dots represent your data points, and while they capture the essential structure, they’re a simplified representation.</p></li>
+<li><p><strong>Selection Bias</strong> (Panel 3): The bold letter “S” represents a systematic pattern of missing data. In real-world scenarios, selection bias occurs when certain groups or regions are systematically excluded from your sample. Here, the “S” shape shows where data would be missing.</p></li>
+<li><p><strong>Estimate</strong> (Panel 4): This is what you’d see if selection bias affected your model. Notice how the “S”-shaped region has no data points—the stipples have been removed. This biased sample would lead to incorrect conclusions because it doesn’t represent the full population.</p></li>
+</ol>
+<p><strong>The Key Insight:</strong> When selection bias occurs, your sample (the stippled dots) doesn’t match your population of interest (the original image). The missing data in the “S” shape creates a distorted view of reality, just like how biased sampling in research can lead to incorrect statistical conclusions.</p>
+<p>This visualization serves as a mental anchor: whenever you encounter data analysis, ask yourself: <strong>“Does my sample match my population of interest?”</strong> If not, you may be dealing with selection bias that could invalidate your results.</p>
 </section>
 <section id="tips-for-success" class="level2">
 <h2 class="anchored" data-anchor-id="tips-for-success">Tips for Success</h2>
@@ -392,13 +317,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
