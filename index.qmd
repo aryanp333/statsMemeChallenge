@@ -26,31 +26,6 @@ Selection bias occurs when observed data isn't representative of the population.
 
 This exercise is fundamentally about **walking AI through a process** to create valuable output. You're not just coding—you're collaborating with AI to transform abstract statistical concepts into a memorable visual artifact. The meme you create will serve as a mental anchor: whenever you think about selection bias in the future, you'll ask yourself: **"Does my sample match my population of interest?"** This visualization will stick with you for the rest of your life, making it easier to recognize and address selection bias in real-world data analysis.
 
-## Getting Started: Repository Setup 🚀
-
-::: {.callout-important}
-## 📁 Repository Setup Instructions
-
-**Step 1:** Fork the starter repository:
-
-- Navigate to [https://github.com/flyaflya/statsMemeChallenge](https://github.com/flyaflya/statsMemeChallenge)
-- Fork the repository to your GitHub account (this creates `https://github.com/[your-username]/statsMemeChallenge`)
-
-**Step 2:** Clone your forked repository locally using Cursor (or VS Code)
-
-**Step 3:** Set up GitHub Pages:
-
-- Go to your repository settings (click the "Settings" tab in your GitHub repository)
-- Scroll down to the "Pages" section in the left sidebar
-- Under "Source", select "Deploy from a branch"
-- Choose "main" branch and "/ (root)" folder
-- Click "Save"
-- Your site will be available at: `https://[your-username].github.io/statsMemeChallenge/`
-- **Note:** It may take a few minutes for the site to become available after enabling Pages
-
-**Step 4:** You're ready to start! Use the `index.qmd` file as your starting point.
-:::
-
 ## The Statistics Meme
 
 The four-panel statistics meme demonstrates selection bias through visualization:
