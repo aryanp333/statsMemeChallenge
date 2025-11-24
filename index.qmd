@@ -269,19 +269,42 @@ plt.show()
 
 ## Understanding Selection Bias Through Visualization
 
-This four-panel meme demonstrates the concept of **selection bias** in statistics:
+This four-panel meme demonstrates the concept of **selection bias** in statistics through a visual metaphor that makes abstract statistical concepts tangible and memorable.
 
-1. **Reality** (Panel 1): This represents the true population—your original image. This is the complete, unbiased truth we're trying to understand.
+### The Four Panels Explained
 
-2. **Your Model** (Panel 2): This is your stippled representation—a model of reality created through systematic sampling (blue noise stippling). The black dots represent your data points, and while they capture the essential structure, they're a simplified representation.
+1. **Reality** (Panel 1): This represents the **true population**—your original image showing the complete, unbiased truth. In statistical terms, this is the full population we want to understand. Every detail is present, nothing is missing. This is what we're trying to estimate or learn about through our data collection.
 
-3. **Selection Bias** (Panel 3): The bold letter "S" represents a systematic pattern of missing data. In real-world scenarios, selection bias occurs when certain groups or regions are systematically excluded from your sample. Here, the "S" shape shows where data would be missing.
+2. **Your Model** (Panel 2): This is your **stippled representation**—a model of reality created through systematic sampling using blue noise stippling. The black dots represent your **data points** or observations. While this simplified representation captures the essential structure and visual information, it's a **sample** of the full population. In real research, this would be your collected dataset—a subset of the population that you hope is representative.
 
-4. **Estimate** (Panel 4): This is what you'd see if selection bias affected your model. Notice how the "S"-shaped region has no data points—the stipples have been removed. This biased sample would lead to incorrect conclusions because it doesn't represent the full population.
+3. **Selection Bias** (Panel 3): The bold letter "S" represents a **systematic pattern of missing data**. In real-world scenarios, selection bias occurs when certain groups, regions, or types of observations are systematically excluded from your sample. The "S" shape visually demonstrates this systematic exclusion—it's not random missing data, but a **patterned absence** that follows a specific structure. This could represent:
+   - Geographic bias (certain regions not sampled)
+   - Demographic bias (certain groups excluded)
+   - Temporal bias (certain time periods missing)
+   - Response bias (certain types of responses not collected)
 
-**The Key Insight:** When selection bias occurs, your sample (the stippled dots) doesn't match your population of interest (the original image). The missing data in the "S" shape creates a distorted view of reality, just like how biased sampling in research can lead to incorrect statistical conclusions.
+4. **Estimate** (Panel 4): This is what you'd see if selection bias affected your model—the **biased estimate** based on incomplete data. Notice how the "S"-shaped region has no data points—the stipples have been removed, creating a "hole" in your data. If you tried to understand the full image using only this biased sample, you would miss critical information in the "S" region. This biased sample would lead to **incorrect conclusions** because it doesn't represent the full population.
 
-This visualization serves as a mental anchor: whenever you encounter data analysis, ask yourself: **"Does my sample match my population of interest?"** If not, you may be dealing with selection bias that could invalidate your results.
+### Why This Matters in Real Statistics
+
+**Selection bias** is one of the most common and dangerous problems in data analysis. It occurs when the process of selecting observations for your sample is not random, leading to a sample that doesn't accurately represent the population of interest.
+
+**Real-World Examples:**
+- **Medical Research**: If a study only includes patients who can travel to a research center, it may miss rural populations, creating geographic selection bias.
+- **Survey Research**: If an online survey excludes people without internet access, it creates a demographic selection bias.
+- **Historical Data**: If records from certain time periods are missing, it creates temporal selection bias.
+
+**The Key Insight:** When selection bias occurs, your sample (the stippled dots) doesn't match your population of interest (the original image). The missing data in the "S" shape creates a **distorted view of reality**, just like how biased sampling in research can lead to incorrect statistical conclusions, invalidated studies, and misleading policy decisions.
+
+### The Visual Metaphor
+
+This visualization serves as a **mental anchor**: whenever you encounter data analysis, ask yourself: **"Does my sample match my population of interest?"** 
+
+- If your sample systematically excludes certain groups or regions (like the "S" excludes data points), you have selection bias.
+- If your sample is representative (like the stippled image without the "S" mask), you can make valid inferences.
+- The "S" shape makes the bias **visible**—you can literally see what's missing, making it easier to recognize and address in real-world scenarios.
+
+This visualization will stick with you, making it easier to recognize and address selection bias in real-world data analysis throughout your career.
 
 ## Tips for Success
 
