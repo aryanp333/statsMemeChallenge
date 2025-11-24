@@ -1,6 +1,7 @@
 ---
 title: "Selection Bias & Missing Data Challenge - Part 2"
 subtitle: "Creating a Statistics Meme: Visualizing Selection Bias"
+author: "Aryan Pagdaloo"
 format:
   html: default
 execute:
